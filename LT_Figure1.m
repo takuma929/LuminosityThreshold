@@ -99,7 +99,6 @@ xlabel('Wavelength [nm]','FontSize',fontsize_axis);ylabel('Reflectance','FontSiz
 
 ax.LineWidth = 0.8;
 ax.Units = 'centimeters';
-ticklengthcm(ax,0.1)
 axis square;
 ax.Position = [0.88 0.8 3.3 3.3];
 box off;grid minor
@@ -179,7 +178,6 @@ xlabel('log_1_0 S/(L+M)','FontSize',fontsize_axis);ylabel('Luminance','FontSize'
 
 ax.LineWidth = 0.8;
 ax.Units = 'centimeters';
-ticklengthcm(ax,0.0)
 axis square;
 ax.Position = [0.88 0.8 3.3 3.3];
 box off;grid minor
