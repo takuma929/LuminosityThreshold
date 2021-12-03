@@ -1,15 +1,6 @@
-clearvars
-close all
+clearvars;close all;clc % clean up
 
-% Change directory
-cd('/Users/takuma/Documents/GitHub/LuminosityThreshold')
-
-% Save all figures to Figures
-savedir = [pwd,'/Figures/'];
-
-load SOCSAllData % Load SOCS reflectance dataset
-
-%
+load SOCS_MB % Load SOCS dataset (MacLeod-Boynton coordinates)
 load LT_Data % Load observer settings
 
 % Set column size
@@ -23,32 +14,13 @@ fontname = 'Arial';
 
 convWindow = 3;
 
-% Exclude complete white included in the dataset for some reason
-PRD_Id = find(sum(Reflectance,2)==31);
-Reflectance(PRD_Id,:) = [];
-
-Reflectance(end+1,:) = ones(1,31);
-
 illList = [3000 6500 20000];
 Type = {'A' 'B'}; % Type A: blackbody reflectance, Type B: reflectance on axis orthogonal to blackbody locus 
 
-% Define color for each participants
-temp = brewermap(6,'Spectral');
-cmap_o.Exp1 = temp([1 6 5 2],:);
-cmap_o.Exp1(3,:) = cmap_o.Exp1(3,:)*0.7;
+load colormap_observers % Load color for each participants
 
-temp = brewermap(10,'Spectral');
-cmap_o.Exp2(1,:) = temp(10,:);
-cmap_o.Exp2(2,:) = cmap_o.Exp1(1,:);
-cmap_o.Exp2(3,:) = temp(5,:)*0.8;
-cmap_o.Exp2(4,:) = cmap_o.Exp1(4,:);
-
-cmap_o.Exp3(1,:) = cmap_o.Exp2(2,:);
-cmap_o.Exp3(2,:) = cmap_o.Exp2(1,:);
-cmap_o.Exp3(3,:) = cmap_o.Exp2(4,:);
-
-for Exp = 3
-    clear corCoeff_linear corCoeff_log UpperLuminance_MaxLum PeakCT_record UpperLuminance_OP_Peak UpperLuminance_Real_smoothed UpperLuminance_Real
+for Exp = [1 3]
+    clear UpperLuminance_MaxLum PeakCT_record UpperLuminance_OP_Peak UpperLuminance_Real_smoothed UpperLuminance_Real
 
     % Extract relevant data for this experiment
     Key = LT_Data.(['Exp',num2str(Exp)]).Key;
@@ -84,7 +56,7 @@ if Exp == 3
     Stimuli_MB = Stimuli.(Key.distribution{dN}).(Key.illuminant{cctN}).('All');
     Result_MB = Results.(Key.distribution{dN}).(Key.illuminant{cctN}).(Type{type});
     SE = SE_Data.(Key.distribution{dN}).(Key.illuminant{cctN}).(Type{type});
-elseif Exp == 1
+elseif Exp == 1 || Exp == 2
     Test_Chromaticity = TestChromaticity.(Key.distribution{dN}).(Key.illuminant{cctN});
     temp = Test_Chromaticity;temp(:,3) = 1;
     Stimuli_MB = Stimuli.(Key.distribution{dN}).(Key.illuminant{cctN});
@@ -92,20 +64,13 @@ elseif Exp == 1
     SE = SE_Data.(Key.distribution{dN}).(Key.illuminant{cctN});
 end
 
-Test_Chromaticity_sRGB = HSLightProbe_MBtoRGBImage(temp);
+Test_Chromaticity_sRGB = LT_MBtoRGBImage(temp);
 
 if Exp == 1 || Exp == 2
-    temp = GetBlackBodyspd(illList(cctN),400:10:700);
+    MB_SOCS = SOCS_MB.(['ill',num2str(illList(cctN))]);
 elseif Exp == 3
-    temp = GetBlackBodyspd(6500,400:10:700);
-    temp(:,2) = temp(:,2).*LT_Data.Exp3.Filter.(Key.illuminant{cctN});
+    MB_SOCS = SOCS_MB.(Key.illuminant{cctN});
 end
-ill = (temp(:,2)/max(temp(:,2)))';
-
-% MacLeod-Boynton Chromaticity for all SOCS database
-[MB_temp,~] = HSLightProbe_MultiSpectralVectortoMBandRGB_400to700(Reflectance.*repmat(ill,length(Reflectance),1));
-MB_SOCS = MB_temp(1:end-1,:);
-MB_SOCS(:,3) = MB_SOCS(:,3)/MB_temp(end,3);
 
 % First in a range of chromaticity
 resolution = 26;
@@ -129,10 +94,7 @@ UpperLuminance_MaxLum = [];
 for N = 1:length(Test_Chromaticity)
     [~,Id] = min(sqrt((20*MB(:,1) - 20*Test_Chromaticity(N,1)).^2+(MB(:,2) - Test_Chromaticity(N,2)).^2));
     UpperLuminance_OP_GT(N,:) = MB(Id,3);
-    
-    %[~,Id] = min(sqrt((20*Stimuli_MB(:,1) - 20*Test_Chromaticity(N,1)).^2+(Stimuli_MB(:,2) - Test_Chromaticity(N,2)).^2));
     [~,Id] = min(sqrt((20*Stimuli_MB(:,1) - 20*Test_Chromaticity(N,1)).^2));
-
     UpperLuminance_MaxLum(N,:) = Stimuli_MB(Id,3);
 end
 
@@ -157,7 +119,7 @@ for N = 1:length(Test_Chromaticity)
 end
 
 % Find the Peak
-if Exp == 1 || Exp == 2
+if Exp == 1
 UpperLuminance_Real_Peak = ones(size(Test_Chromaticity,1),size(Result_MB,2));
 UpperLuminance_Real_smoothed_Peak = ones(size(Test_Chromaticity,1),size(Result_MB,2));
 
@@ -169,17 +131,13 @@ Results_GT = Result_MB(:,observerN);
 PeakChromaticity = Test_Chromaticity(Id,:);
 
 load MB_bbl_500to25000with500step
+
 [~,Id] = min(sqrt((PeakChromaticity(1)*20-MB_bbl_500to25000with500step(:,1)*20).^2+(PeakChromaticity(2)-MB_bbl_500to25000with500step(:,2)).^2));
-%[~,Id] = min(sqrt(sum((PeakChromaticity(1)*10-MB_bbl_500to25000with500step(:,1)*10).^2,2)));
 CT = 500:500:25000;
 PeakCT = CT(Id);
 
 if Exp == 1 || Exp == 2
     PeakCT_record(dN,cctN,observerN) = PeakCT;
-end
-
-if illList(cctN) == 6500 && dN == 1
-    %PeakCT = 5500;
 end
 
 load(['OP_',num2str(PeakCT),'_MB']);
@@ -195,13 +153,7 @@ for N = 1:length(Test_Chromaticity)
     UpperLuminance_OP_Peak(N,observerN,:) = MB_OP_Peak(Id,3);
 end
 
-temp = GetBlackBodyspd(PeakCT,400:10:700);
-ill = (temp(:,2)/max(temp(:,2)))';
-
-% MacLeod-Boynton Chromaticity for all SOCS database
-[MB_temp,~] = HSLightProbe_MultiSpectralVectortoMBandRGB_400to700(Reflectance.*repmat(ill,length(Reflectance),1));
-MB_SOCS_Peak = MB_temp(1:end-1,:);
-MB_SOCS_Peak(:,3) = MB_SOCS_Peak(:,3)/MB_temp(end,3);
+MB_SOCS_Peak = SOCS_MB.(['ill',num2str(PeakCT)]);
 
 rmin = min(TestMB(:,1))-0.0001;rmax = max(TestMB(:,1))+0.0001;
 bmin = min(log10(TestMB(:,2)))-0.001;bmax = max(log10(TestMB(:,2)))+0.001;
@@ -223,7 +175,7 @@ end
 end
 end
 
-if Exp == 1 || Exp == 2
+if Exp == 1
     if illList(cctN) == 3000
         cmap = [0.9925    0.8325    0.6660];
     elseif illList(cctN) == 6500
@@ -276,11 +228,6 @@ blue = [78 86 246]/255;
 
 Test_Chromaticity_sRGB = [0 0 0];
 
-% Plot errorr bar (SEM)
-for n = 1:size(Test_Chromaticity,1)
-    %errorbar(Test_Chromaticity(n,1),mean(Result_MB(n,:),2),std(Result_MB(n,:),[],2)/sqrt(length(Key.observer)),'-','Color',Test_Chromaticity_sRGB,'LineWidth',0.5);hold on;
-end
-
 % Insert this
 x = Test_Chromaticity(:,1);
 
@@ -296,7 +243,6 @@ for observerN = 1:size(Result_MB,2)
     errorbar(x,Result_MB(:,observerN),SE(:,observerN),'-','Color',o_cmap(observerN,:),'LineWidth',0.5,'MarkerFaceColor','k');hold on;
     plot(x,Result_MB(:,observerN),'-','Color',o_cmap(observerN,:),'LineWidth',0.5,'MarkerFaceColor','k');hold on;
     scatter(x,Result_MB(:,observerN),s(Exp),o_cmap(observerN,:),'s','filled','MarkerFaceAlpha',0.8);hold on;
-    %scatter(x,log10(Result_MB(:,observerN)),s(Exp),Test_Chromaticity_sRGB,'o','filled','MarkerEdgeColor',[1 1 1],'MarkerFaceAlpha',0.8);hold on;
 end
 
 plot(x,mean(Result_MB,2),'-','Color',[0 0 0],'LineWidth',1.5,'LineStyle','-','MarkerFaceColor','k');hold on;
@@ -319,41 +265,13 @@ elseif Exp == 3
     scatter(x,mean(Result_MB,2),40,Test_Chromaticity_sRGB,'o','filled','MarkerEdgeColor',[1 1 1],'MarkerFaceAlpha',0.8);hold on;
 end
 
-if Exp == 3
-    corCoeff_linear.OP_GT(dN,cctN,type,:) = corr(Result_MB,UpperLuminance_OP_GT*Lum_k);
-    corCoeff_linear.Real_GT(dN,cctN,type,:) = corr(Result_MB,UpperLuminance_Real*Lum_k);
-    corCoeff_linear.Real_smoothed_GT(dN,cctN,type,:) = corr(Result_MB,UpperLuminance_Real_smoothed*Lum_k);
-    corCoeff_linear.MaxLum(dN,cctN,type,:) = corr(Result_MB,UpperLuminance_MaxLum*Lum_k);
-else
-    corCoeff_linear.OP_GT(dN,cctN,:) = corr(Result_MB,UpperLuminance_OP_GT*Lum_k);
-    corCoeff_linear.Real_GT(dN,cctN,:) = corr(Result_MB,UpperLuminance_Real*Lum_k);
-    corCoeff_linear.Real_smoothed_GT(dN,cctN,:) = corr(Result_MB,UpperLuminance_Real_smoothed*Lum_k);
-    corCoeff_linear.MaxLum(dN,cctN,:) = corr(Result_MB,UpperLuminance_MaxLum*Lum_k);
 
-for observerN = 1:size(Result_MB,2) 
-    corCoeff_linear.OP_Peak(dN,cctN,observerN) = corr(Result_MB(:,observerN),UpperLuminance_OP_Peak(:,observerN)*Lum_k);
-    corCoeff_linear.Real_Peak(dN,cctN,observerN) = corr(Result_MB(:,observerN),UpperLuminance_Real_Peak(:,observerN)*Lum_k);
-    corCoeff_linear.Real_smoothed_Peak(dN,cctN,observerN) = corr(Result_MB(:,observerN),UpperLuminance_Real_smoothed_Peak(:,observerN)*Lum_k);
-end
-
-end
 
 axis square;ax = gca;
 
 if Exp == 1
     ax.XLim = [0.66 0.77];ax.XTick = [0.66 0.77];
     ax.XTickLabel = ["0.66","0.77"];
-elseif Exp == 2
-    if illList(cctN) == 3000
-    ax.XLim = [0.70 0.82];ax.XTick = [0.70 0.82];
-    ax.XTickLabel = ["0.70","0.82"];
-    elseif illList(cctN) == 6500
-    ax.XLim = [0.66 0.78];ax.XTick = [0.66 0.78];
-    ax.XTickLabel = ["0.66","0.78"];
-    elseif illList(cctN) == 20000
-    ax.XLim = [0.65 0.75];ax.XTick = [0.65 0.75];
-    ax.XTickLabel = ["0.65","0.75"];
-    end    
 elseif Exp == 3
     if strcmp(illList(cctN),'Magenta')
         ax.XLim = [0.71 0.84];ax.XTick = [0.71 0.84];
@@ -366,12 +284,9 @@ end
 
 if Exp == 1
     ax.YLim = [-2 65];ax.YTick = [0 30 60];ax.YTickLabel = ["0.00","30.0","60.0"];
-elseif Exp == 2
-    ax.YLim = [-2 60];ax.YTick = [0 30 60];ax.YTickLabel = ["0.00","30.0","60.0"];
 elseif Exp == 3
     ax.YLim = [-2 28];ax.YTick = [0 14 28];ax.YTickLabel = ["0.00","14.0","28.0"];
 end
-
 
 fig.PaperType       = 'a4';fig.PaperUnits = 'centimeters';
 fig.Units           = 'centimeters';fig.Color  = 'w';
@@ -379,11 +294,8 @@ fig.InvertHardcopy  = 'off';
 fig.PaperPosition   = [0,10,9.5,8.45];
 
 if Exp == 1
-    %fig.Position = [0,10,twocolumn/3,twocolumn/3];
     fig.Position = [0,10,twocolumn/4,twocolumn/4];
-
 elseif Exp == 3
-    %fig.Position = [0,10,twocolumn/4,twocolumn/4];
     fig.Position = [0,10,twocolumn/4*0.95,twocolumn/4*0.95];
 end
      
@@ -421,8 +333,38 @@ end
 end
 end
 
-if Exp == 1 || Exp == 2
-    %save(['CorCoeff_Exp',num2str(Exp)],'corCoeff_linear','PeakCT_record')
-elseif Exp == 3
-    %save(['CorCoeff_Exp',num2str(Exp)],'corCoeff_linear')
+% Fucntion to convert MacLeod-Boynton image to RGB image
+function RGBImage = LT_MBtoRGBImage(MBImage)
+
+% This i based on measurement of an experimental monitor
+Matrix_LMS2RGB = [0.071311	-0.138524	0.001967
+    -0.013737	0.078581	-0.002962
+    -0.000745	-0.004354	0.014493];
+
+imagesize = size(MBImage);
+
+if length(imagesize) == 3
+    MBImage_reshaped = reshape(MBImage,size(MBImage,1)*size(MBImage,2),size(MBImage,3));
+elseif length(imagesize) == 2
+    MBImage_reshaped = MBImage;
+end
+Luminance = MBImage_reshaped(:,3);
+Redness = MBImage_reshaped(:,1);
+Blueness = MBImage_reshaped(:,2);
+
+Rlms_reshaped(:,1) = Luminance.*Redness;
+Rlms_reshaped(:,3) = Luminance.*Blueness;
+Rlms_reshaped(:,2) = Luminance-Rlms_reshaped(:,1);
+
+RGBImage_reshaped = Matrix_LMS2RGB*Rlms_reshaped';
+
+if length(imagesize) == 3
+    RGBImage = reshape(RGBImage_reshaped',imagesize(1),imagesize(2),3);
+elseif length(imagesize) == 2
+    RGBImage = RGBImage_reshaped;
+end
+
+RGBImage= RGBImage/max(max(RGBImage(:)));
+RGBImage = max(RGBImage,0);
+RGBImage = power(RGBImage,1/2.2);
 end

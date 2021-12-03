@@ -1,4 +1,4 @@
-close all;clearvars;clc
+close all;clearvars;clc % clean up
 
 % Set column size
 twocolumn = 18.5;

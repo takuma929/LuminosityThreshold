@@ -1,19 +1,20 @@
 %% Generate Figure 3
 clearvars;close all;clc % standard clean up
 
+% loading data 
 load LT_Data
 
 rng(1); % freeze the seed for reproduciability
 
-circleN = 10000;
-circleSize = 1420;
+circleN = 10000; % number of circles to draw
+circleSize = 1420; % size of each circle
 
 Exp = 1;
 Key = LT_Data.Exp1.Key;
 illList = LT_Data.Exp1.illList;
 TestChromaticity = LT_Data.Exp1.TestChromaticity;
 
-%% Plot example of stimulus presentation for natural distribution, 6500K for Experiment 1
+%% Plot example of stimulus configuration for natural distribution, 6500K for Experiment 1
 fig = figure;ax = gca;
 
 Stimuli = LT_Data.Exp1.Stimuli;
@@ -50,4 +51,4 @@ ax.Color  = [0 0 0];
 ax.Position = [0 0 10 10];
 box on
     
-print(fig,'-painters','-r600',fullfile('Figs','Figure3.png'),'-dpng')
+exportgraphics(fig,fullfile('Figs','Figure3.png'),'Resolution',600)

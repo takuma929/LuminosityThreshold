@@ -1,13 +1,12 @@
 clearvars
 close all
 
-load('LT_Data')
-cd('/Users/takuma/Documents/GitHub/LuminosityThreshold')
+load LT_Data
 
+% Note: MaxLum model corresponds to surrounding color model in manuscript
 ModelName = {'OP_GT','Real_GT','Real_smoothed_GT',...
     'OP_Peak','Real_Peak','Real_smoothed_Peak','MaxLum'};
 
-%cmap = [234 60 247;97 107 225;110 201 233;128 128 128;248 214 252;196 198 230;196 223 235]/255;
 cmap = [234 60 247;97 107 225;248 214 252;196 198 230;128 128 128]/255;
 
 o_cmap_temp = brewermap(6,'Spectral');
@@ -26,7 +25,8 @@ cmap_o.Exp3(1,:) = cmap_o.Exp2(2,:);
 cmap_o.Exp3(2,:) = cmap_o.Exp2(1,:);
 cmap_o.Exp3(3,:) = cmap_o.Exp2(4,:);
 
-for Exp = 3
+for Exp = 1:3
+% load precomputed coefficients
 load(['CorCoeff_Exp',num2str(Exp)])
 clear list
 
@@ -53,13 +53,11 @@ for dN = 1:size(corCoeff_linear.OP_GT,1)
  
 if Exp == 1
     order = [1 4 3 2];
-    %order = [1 2 3 4];
     list(1,:) = corCoeff_linear.OP_GT(dN,cctN,order);
     list(2,:) = corCoeff_linear.Real_smoothed_GT(dN,cctN,order);
     list(3,:) = corCoeff_linear.MaxLum(dN,cctN,order);
 elseif Exp == 2
     order = [2 1 3 4];
-    %order = [1 2 3 4];
     list(1,:) = corCoeff_linear.OP_GT(dN,cctN,order);
     list(2,:) = corCoeff_linear.Real_smoothed_GT(dN,cctN,order);
     list(3,:) = corCoeff_linear.OP_Peak(dN,cctN,order);

@@ -9,14 +9,7 @@ Key.illuminant = {'ill3000K','ill6500K','ill20000K'};
 Key.distribution = {'Natural','Reverse','Flat'};
 illList = [3000 6500 20000];
 
-rng(1); % freeze the seed for reproduciability
-%for dN = 1:length(Key.distribution)
-%for cctN = 1:length(Key.illuminant)
-
 Type = {'A','B'};
-
-circleN = 10000;
-circleSize = 1420;
 
 % Set column size
 twocolumn = 18.5;
@@ -27,7 +20,8 @@ fontsize = 7;
 fontsize_axis = 8;
 fontname = 'Arial';
 
-for Exp = 3
+%% Plot surrounding color distributions
+for Exp = 1:3
     Key = LT_Data.(['Exp',num2str(Exp)]).Key;
     illList = LT_Data.(['Exp',num2str(Exp)]).illList;
     TestChromaticity = LT_Data.(['Exp',num2str(Exp)]).TestChromaticity;
@@ -45,37 +39,8 @@ for cctN = 1:length(Key.illuminant)
     end
     
     temp = Test_Chromaticity;temp(:,3) = 1;
-    Test_Chromaticity_sRGB = HSLightProbe_MBtoRGBImage(temp);
-
-    Stimuli_sRGB = (HSLightProbe_MBtoRGBImage(Stimuli_MB)*0.8)';
-    
-%     scatter(rand(circleN,1),rand(circleN,1),circleSize,Stimuli_sRGB(randi(size(Stimuli_sRGB,1),1,circleN),:),'o','filled');hold on 
-%     scatter(0.5,0.5,circleSize,[0.8 0.8 0.8],'o','filled') 
-%     
-%     axis square
-%     ax.XLim = [0 1];ax.XTick = [];
-%     ax.XTickLabel = [];xlabel('');
-%     
-%     ax.YLim = [0 1];ax.YTick = [];
-%     ax.YTickLabel = [];ylabel('');
-%     
-%     fig.PaperType       = 'a4';fig.PaperUnits = 'centimeters';
-%     fig.Units           = 'centimeters';fig.Color  = 'w';
-%     fig.InvertHardcopy  = 'off';
-%     fig.PaperPosition   = [0,10,10,10];
-%     fig.Position = [0,10,twocolumn/4,twocolumn/4];
-%     
-%     ax.FontName = 'Arial';ax.FontSize = 18;
-%     ax.LineWidth = 0.5;
-%     ax.Units = 'centimeters';
-%     axis square;
-%     ax.Color  = [0 0 0];
-%     ax.Position = [0.97 0.8 3.4 3.4];
-% 
-%     box on
-%     
-    %print(fig,'-painters','-r600',[pwd,'/Figures/Stimuli_Exp',num2str(Exp),'_',Key.distribution{dN},'_',Key.illuminant{cctN},'.png'],'-dpng')
-
+    Test_Chromaticity_sRGB = LT_MBtoRGBImage(temp);
+    Stimuli_sRGB = (LT_MBtoRGBImage(Stimuli_MB)*0.8)';
     
 %% Plot color distribution
 if Exp == 1 || Exp == 2
@@ -101,20 +66,18 @@ if Exp == 1 || Exp == 2
 else
     scatter(Stimuli_MB(:,1),Stimuli_MB(:,3),30,cmap,'o','filled','MarkerEdgeColor',[0.8 0.8 0.8],'MarkerFaceAlpha',0.15);hold on;
 end
-% Plot mean LMS
 
 % Convert MB to meanLMS
 Stimuli_meanLMS(1) = mean(Stimuli_MB(:,1).*Stimuli_MB(:,3));
 Stimuli_meanLMS(3) = mean(Stimuli_MB(:,2).*Stimuli_MB(:,3));
 Stimuli_meanLMS(2) = mean(Stimuli_MB(:,3)-Stimuli_meanLMS(1));
 
-% Convert meanLMS to MB
+% Convert back meanLMS to MB
 Stimuli_meanLMS_MB(1) = Stimuli_meanLMS(1)./(Stimuli_meanLMS(1)+Stimuli_meanLMS(2));
 Stimuli_meanLMS_MB(2) = Stimuli_meanLMS(3)./(Stimuli_meanLMS(1)+Stimuli_meanLMS(2));
 Stimuli_meanLMS_MB(3) = Stimuli_meanLMS(1)+Stimuli_meanLMS(2);
 
 scatter(Stimuli_meanLMS_MB(1),Stimuli_meanLMS_MB(3),80,'kx','Linewidth',1.5)
-
 
 axis square;ax = gca;
 
@@ -160,12 +123,12 @@ box on
 
 grid minor
 ax.XMinorGrid = 'off';ax.YMinorGrid = 'on';
-
-if Exp == 1
+switch Exp
+    case 1
     exportgraphics(fig,fullfile('Figs',['Figure4a_',Key.distribution{dN},'.pdf']),'ContentType','vector')
-elseif Exp == 2 
+    case 2 
     exportgraphics(fig,fullfile('Figs',['Figure7a_',Key.distribution{dN},'_',Key.illuminant{cctN},'.pdf']),'ContentType','vector')
-elseif Exp == 3
+    case 3
     exportgraphics(fig,fullfile('Figs',['Figure12a_',Key.distribution{dN},'_',Key.illuminant{cctN},'.pdf']),'ContentType','vector')
 end
 
@@ -174,7 +137,7 @@ end
 end
 
 %% Plot test chromaticity
-for Exp = 3
+for Exp = 1:3
     Key = LT_Data.(['Exp',num2str(Exp)]).Key;
     illList = LT_Data.(['Exp',num2str(Exp)]).illList;
     TestChromaticity = LT_Data.(['Exp',num2str(Exp)]).TestChromaticity;
@@ -184,7 +147,7 @@ for Exp = 3
     else
         typeN = 1;
     end
-
+    
     dN = 1;
 
 for cctN = 1:length(Key.illuminant)
@@ -214,7 +177,7 @@ fig = figure;
     end
     
     temp = Test_Chromaticity;temp(:,3) = 1;
-    Test_Chromaticity_sRGB = HSLightProbe_MBtoRGBImage(temp);
+    Test_Chromaticity_sRGB = LT_MBtoRGBImage(temp);
     
     load MB_bbl_500to25000with500step
     scatter(Stimuli_MB(:,1),log10(Stimuli_MB(:,2)),40,cmap,'o','filled','MarkerEdgeColor',[0.85 0.85 0.85],'MarkerFaceAlpha',0.1);hold on;
@@ -223,16 +186,14 @@ fig = figure;
     if Exp == 1 || Exp == 2
         scatter(Test_Chromaticity(:,1),log10(Test_Chromaticity(:,2)),40,Test_Chromaticity_sRGB'*1.1,'o','filled','LineWidth',0.2,'MarkerEdgeColor',[0 0 0],'MarkerFaceAlpha',1);hold on
     elseif Exp == 3
-        %[C,ia] = unique(Test_Chromaticity(:,1));
-        V = 0.0;
-        scatter(Test_Chromaticity([1:2 4:7],1),log10(Test_Chromaticity([1:2 4:7],2)),40,[V V V],'o','filled','LineWidth',0.5,'MarkerEdgeColor',[1 1 1],'MarkerFaceAlpha',1);hold on
-        scatter(Test_Chromaticity([8:9 11:14],1),log10(Test_Chromaticity([8:9 11:14],2)),40,[V V V],'^','filled','LineWidth',0.5,'MarkerEdgeColor',[1 1 1],'MarkerFaceAlpha',1);hold on
+        scatter(Test_Chromaticity([1:2 4:7],1),log10(Test_Chromaticity([1:2 4:7],2)),40,[0 0 0],'o','filled','LineWidth',0.5,'MarkerEdgeColor',[1 1 1],'MarkerFaceAlpha',1);hold on
+        scatter(Test_Chromaticity([8:9 11:14],1),log10(Test_Chromaticity([8:9 11:14],2)),40,[0 0 0],'^','filled','LineWidth',0.5,'MarkerEdgeColor',[1 1 1],'MarkerFaceAlpha',1);hold on
         if cctN == 1
-            scatter(Test_Chromaticity([8 11 12 13 14],1),log10(Test_Chromaticity([8 11 12 13 14],2)),30,[V V V],'^','filled','LineWidth',0.5,'MarkerEdgeColor',[1 0 0],'MarkerFaceAlpha',1);hold on
+            scatter(Test_Chromaticity([8 11 12 13 14],1),log10(Test_Chromaticity([8 11 12 13 14],2)),30,[0 0 0],'^','filled','LineWidth',0.5,'MarkerEdgeColor',[1 0 0],'MarkerFaceAlpha',1);hold on
         elseif cctN == 2
-            scatter(Test_Chromaticity([8 9 12 13 14],1),log10(Test_Chromaticity([8 9 12 13 14],2)),30,[V V V],'^','filled','LineWidth',0.5,'MarkerEdgeColor',[1 0 0],'MarkerFaceAlpha',1);hold on
+            scatter(Test_Chromaticity([8 9 12 13 14],1),log10(Test_Chromaticity([8 9 12 13 14],2)),30,[0 0 0],'^','filled','LineWidth',0.5,'MarkerEdgeColor',[1 0 0],'MarkerFaceAlpha',1);hold on
         end
-        scatter(Test_Chromaticity(3,1),log10(Test_Chromaticity(3,2)),50,[V V V],'s','filled','LineWidth',0.2,'MarkerEdgeColor',[1 1 1],'MarkerFaceAlpha',1);hold on
+        scatter(Test_Chromaticity(3,1),log10(Test_Chromaticity(3,2)),50,[0 0 0],'s','filled','LineWidth',0.2,'MarkerEdgeColor',[1 1 1],'MarkerFaceAlpha',1);hold on
     end
     axis square;ax = gca;
 
@@ -276,12 +237,50 @@ fig = figure;
     box on
     grid minor
     ax.XMinorGrid = 'on';ax.YMinorGrid = 'on';
-    if Exp == 1
+    
+    switch Exp 
+        case 1
         exportgraphics(fig,fullfile('Figs','Figure4b.pdf'),'ContentType','vector')
-    elseif Exp == 2 
+        case 2 
         exportgraphics(fig,fullfile('Figs',['Figure7b_',Key.illuminant{cctN},'.pdf']),'ContentType','vector')
-    elseif Exp == 3
+        case 3
         exportgraphics(fig,fullfile('Figs',['Figure12b_',Key.illuminant{cctN},'.pdf']),'ContentType','vector')
     end
 end
+end
+
+% Fucntion to convert MacLeod-Boynton image to RGB image
+function RGBImage = LT_MBtoRGBImage(MBImage)
+
+% This i based on measurement of an experimental monitor
+Matrix_LMS2RGB = [0.071311	-0.138524	0.001967
+    -0.013737	0.078581	-0.002962
+    -0.000745	-0.004354	0.014493];
+
+imagesize = size(MBImage);
+
+if length(imagesize) == 3
+    MBImage_reshaped = reshape(MBImage,size(MBImage,1)*size(MBImage,2),size(MBImage,3));
+elseif length(imagesize) == 2
+    MBImage_reshaped = MBImage;
+end
+Luminance = MBImage_reshaped(:,3);
+Redness = MBImage_reshaped(:,1);
+Blueness = MBImage_reshaped(:,2);
+
+Rlms_reshaped(:,1) = Luminance.*Redness;
+Rlms_reshaped(:,3) = Luminance.*Blueness;
+Rlms_reshaped(:,2) = Luminance-Rlms_reshaped(:,1);
+
+RGBImage_reshaped = Matrix_LMS2RGB*Rlms_reshaped';
+
+if length(imagesize) == 3
+    RGBImage = reshape(RGBImage_reshaped',imagesize(1),imagesize(2),3);
+elseif length(imagesize) == 2
+    RGBImage = RGBImage_reshaped;
+end
+
+RGBImage= RGBImage/max(max(RGBImage(:)));
+RGBImage = max(RGBImage,0);
+RGBImage = power(RGBImage,1/2.2);
 end
