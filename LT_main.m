@@ -1,0 +1,11 @@
+clearvars;close all;clc % clean up
+LT_saveCorrelationCoefficient
+LT_Figure1
+LT_Figure2
+LT_Figure3
+LT_Figure4and7and12
+LT_Figure5and13
+LT_Figure6and10and14
+LT_Figure8and9
+LT_Figure11
+close all
