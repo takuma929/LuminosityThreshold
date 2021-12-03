@@ -9,25 +9,11 @@ ModelName = {'OP_GT','Real_GT','Real_smoothed_GT',...
 
 cmap = [234 60 247;97 107 225;248 214 252;196 198 230;128 128 128]/255;
 
-o_cmap_temp = brewermap(6,'Spectral');
-
-temp = brewermap(6,'Spectral');
-cmap_o.Exp1 = temp([1 6 5 2],:);
-cmap_o.Exp1(3,:) = cmap_o.Exp1(3,:)*0.7;
-
-temp = brewermap(10,'Spectral');
-cmap_o.Exp2(1,:) = temp(10,:);
-cmap_o.Exp2(2,:) = cmap_o.Exp1(1,:);
-cmap_o.Exp2(3,:) = temp(5,:)*0.8;
-cmap_o.Exp2(4,:) = cmap_o.Exp1(4,:);
-
-cmap_o.Exp3(1,:) = cmap_o.Exp2(2,:);
-cmap_o.Exp3(2,:) = cmap_o.Exp2(1,:);
-cmap_o.Exp3(3,:) = cmap_o.Exp2(4,:);
+load colormap_observers % Load color for each participants
 
 for Exp = 1:3
 % load precomputed coefficients
-load(['CorCoeff_Exp',num2str(Exp)])
+load(['CorCoeff_Exp',num2str(Exp),'_new'])
 clear list
 
 Key = LT_Data.(['Exp',num2str(Exp)]).Key;

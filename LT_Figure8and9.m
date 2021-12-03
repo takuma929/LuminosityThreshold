@@ -53,7 +53,6 @@ elseif Exp == 3
     MB_SOCS = SOCS_MB.(Key.illuminant{cctN});
 end
 
-
 % First in a range of chromaticity
 resolution = 26;
 
