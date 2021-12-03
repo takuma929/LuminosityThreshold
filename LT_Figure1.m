@@ -21,8 +21,8 @@ load('SOCS_MB');
 
 bandpass = zeros(33,1);bandpass(11:21) = 1;
 bandstop = ones(33,1);bandstop(11:21) = 0;
-sRGB_bandpass = HSLightProbe_MultiSpectralImagetosRGB_400to720(bandpass');
-sRGB_bandstop = HSLightProbe_MultiSpectralImagetosRGB_400to720(bandstop');
+sRGB_bandpass = [0.6270 1 0];
+sRGB_bandstop = [0.9361 0 1];
 
 % list of correlated color temperatures
 CCT = [3000 6500 20000];
