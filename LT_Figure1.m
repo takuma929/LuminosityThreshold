@@ -115,7 +115,7 @@ for n = 1:length(CCT)
     scatter(SOCS_MB.(['ill',num2str(CCT(n))])(:,1),SOCS_MB.(['ill',num2str(CCT(n))])(:,3),4,CCT_RGB(n,:),'o','filled','MarkerFaceAlpha',1);hold on;
     
     % Load optimal colors (MacLeod-Boynton chromaticity diagram)
-    load(['OptimalColour_MB_bbl_',num2str(CCT(n)),'K'])
+    load(['OP_',num2str(CCT(n)),'_MB'])
     
     % Plot optimal colors every 5 data points
     scatter(MB(1:5:end,1),MB(1:5:end,3),0.2,CCT_RGB(n,:),'o','filled','MarkerFaceAlpha',0.5);hold on;
