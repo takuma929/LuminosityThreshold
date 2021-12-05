@@ -11,13 +11,12 @@ fontname = 'Arial';
 
 %% Panel (a) Spectrum 3000K, 6500K, 20000K
 load LT_Data
-load('MB_bbl_500to25000with500step')
+load MB_bbl_500to25000with500step
+load ill6500K
 
 c_magenta = [237 87 247]/255;
 c_green = [168 246 76]/255*0.8;
     
-ill6500K = GetBlackBodyspd(6500,400:10:700);
-
 Magenta = LT_Data.Exp3.Filter.Magenta.*ill6500K(:,2);Magenta = Magenta/max(Magenta);
 Green = LT_Data.Exp3.Filter.Green.*ill6500K(:,2);Green = Green/max(Green);
 
