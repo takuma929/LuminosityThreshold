@@ -1,26 +1,30 @@
 %% Luminosity Threshold
-% Created by TM 18/10/2021
+% Created by TM 5/12/2021
 % Dependencies: Psychtoolbox 3
 
 All codes are written using MATLAB R2020a.
 To save figures, the toolbox use a function "exportgraphics" introduced in R2020a.
-If you use an early version of MATLAB, the exportgraphics should be replaced by anotehr function to save figures (e.g. print).
+If you use an early version of MATLAB, the exportgraphics should be replaced by anotehr function (e.g. print).
 
-Associated publication 
-Takuma Morimoto, and Hannah E. Smithson, “Discrimination of spectral reflectance under complex environmental illumination,” Journal of the Optical Society of America A, 35, 4, B244-B255 (2018) https://doi.org/10.1364/JOSAA.35.00B244
+[Associated publication]
+Takuma Morimoto, Ai Numata, Kazuho Fukuda and Keiji Uchikawa, “Luminosity thresholds of colored surfaces are determined by their upper-limit luminances empirically internalized in the visual system,” Journal of Vision (in press)
 
 %% Instructions %%
-This repository stores raw data and codes to reproduce figures in a following paper. 
-"Luminosity thresholds of colored surfaces are determined by their upper-limit luminances internalized in the visual system", (in press for Journal of Vision)
+This repository stores raw data and codes to reproduce figures in the publication above.
+Clone the repository and set the repository to current directory in MATLAB.
+Run LT_main.m and all figures will be saved in a folder called Figs.
 
 Main codes to run the simulation:
-- runMetrics:
-
+- LT_main.m
+-
 Data:
-- 99Reflectances.csv: Data on 99 reflectance samples from IES TM-30-2015 used in this analysis
-
-Functions:
--getSimulatedSpectra: Generate radiance spectra of the 401 illuminants from the 99 surfaces
-
+- LT_Data.m: This stores raw experimental data and chromatic properties of experimental stimuli. The field name describes what it stores.
+- MB_bbl_500to25000with500step.mat : This stores MacLeod-Boynton chromaticity coordinates of black body radiance from 500K to 25000K with 500K steps (L/(L+M) and S/(L+M) for first and second columns, respectively).
+- SOCS_MB.mat: This stores SOCS reflectance dataset in MacLeod-Boynton chromaticity coordinates.
+- SpectrumLocus_MB.mat: This stores MacLeod-Boynton chromaticity coordinates of spectrum locus (in the order of wavelength in nm, L/(L+M), S/(L+M) and L+M from first to fourth columns).
+- ill6500K.mat: Spectrum of 6500K illuminant (wavelength and relative energy for first and second columns)
+- colormap_observers.mat : Color map to plot individual observer data in sRGB format
+  
 Plotting scripts:
--Plots figures from corresponding manuscript: Journal of Vision in press (to be uploaded when this is published) 
+- LT_FigureX.m: Generate Figure X
+
