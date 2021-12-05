@@ -45,7 +45,7 @@ else
     Result_MB = Results.(Key.distribution{dN}).(Key.illuminant{cctN});
 end
 
-Test_Chromaticity_sRGB = HSLightProbe_MBtoRGBImage(temp);
+Test_Chromaticity_sRGB = LT_MBtoRGBImage(temp);
 
 if Exp == 1 || Exp == 2
     MB_SOCS = SOCS_MB.(['ill',num2str(illList(cctN))]);
