@@ -1,9 +1,6 @@
-close all
-clearvars
+close all;clearvars;clc % clean up
 
-cd('/Users/takuma/Documents/GitHub/LuminosityThreshold')
-
-load LT_Data
+load LT_Data % load various Data
 
 Key.illuminant = {'ill3000K','ill6500K','ill20000K'};
 Key.distribution = {'Natural','Reverse','Flat'};
