@@ -54,9 +54,9 @@ ax.XMinorGrid = 'off';ax.YMinorGrid = 'on';
 exportgraphics(fig,fullfile('Figs','Figure11a.pdf'),'ContentType','vector')
 
 %% Distribution of chromaticity 
-c.magenta = HSLightProbe_MultiSpectralVectortoMBandRGB_400to700(Magenta');
-c.green = HSLightProbe_MultiSpectralVectortoMBandRGB_400to700(Green');
-c.ill6500K = HSLightProbe_MultiSpectralVectortoMBandRGB_400to700(ill6500K(:,2)');
+c.magenta = [0.7716 2.1131]; % L/(L+M), S/(L+M)
+c.green = [0.6728 0.2759];
+c.ill6500K = [0.6996 1.1236];
 
 fig = figure;
 plot(MB_bbl_500to25000with500step(:,1),log10(MB_bbl_500to25000with500step(:,2)),'Color','r','LineWidth',0.5);hold on;
