@@ -11,7 +11,7 @@ fontname = 'Arial';
 
 %% Panel (a) Spectrum 3000K, 6500K, 20000K
 load LT_Data
-load('MB_bbl_500to30000with500step')
+load('MB_bbl_500to25000with500step')
 
 c_magenta = [237 87 247]/255;
 c_green = [168 246 76]/255*0.8;
@@ -60,7 +60,7 @@ c.green = HSLightProbe_MultiSpectralVectortoMBandRGB_400to700(Green');
 c.ill6500K = HSLightProbe_MultiSpectralVectortoMBandRGB_400to700(ill6500K(:,2)');
 
 fig = figure;
-plot(MB_bbl_500to30000with500step(:,1),log10(MB_bbl_500to30000with500step(:,2)),'Color','r','LineWidth',0.5);hold on;
+plot(MB_bbl_500to25000with500step(:,1),log10(MB_bbl_500to25000with500step(:,2)),'Color','r','LineWidth',0.5);hold on;
 scatter(c.magenta(1),log10(c.magenta(2)),100,c_magenta,'x','LineWidth',2);hold on;
 scatter(c.green(1),log10(c.green(2)),100,c_green,'x','LineWidth',2);hold on;
 scatter(c.ill6500K(1),log10(c.ill6500K(2)),100,[0.5 0.5 0.5],'x','LineWidth',2);hold on;
