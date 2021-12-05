@@ -16,7 +16,7 @@ Run LT_main.m and all figures will be saved in a folder called Figs.
 
 Main codes to run the simulation:
 - LT_main.m
--
+
 Data:
 - LT_Data.m: This stores raw experimental data and chromatic properties of experimental stimuli. The field name describes what it stores.
 - MB_bbl_500to25000with500step.mat : This stores MacLeod-Boynton chromaticity coordinates of black body radiance from 500K to 25000K with 500K steps (L/(L+M) and S/(L+M) for first and second columns, respectively).
