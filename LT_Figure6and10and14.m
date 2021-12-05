@@ -1,5 +1,4 @@
-clearvars
-close all
+clearvars;close all;clc
 
 load LT_Data
 
@@ -13,7 +12,7 @@ load colormap_observers % Load color for each participants
 
 for Exp = 1:3
 % load precomputed coefficients
-load(['CorCoeff_Exp',num2str(Exp),'_new'])
+load(['CorCoeff_Exp',num2str(Exp)])
 clear list
 
 Key = LT_Data.(['Exp',num2str(Exp)]).Key;

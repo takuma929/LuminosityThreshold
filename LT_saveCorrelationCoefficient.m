@@ -186,9 +186,9 @@ end
 end
 
 if Exp == 2
-    save(['CorCoeff_Exp',num2str(Exp),'_new'],'corCoeff_linear','PeakCT_record')
+    save(['CorCoeff_Exp',num2str(Exp)],'corCoeff_linear','PeakCT_record')
 elseif Exp == 1 || Exp == 3
-    save(['CorCoeff_Exp',num2str(Exp),'_new'],'corCoeff_linear')
+    save(['CorCoeff_Exp',num2str(Exp)],'corCoeff_linear')
 end
 
 end
