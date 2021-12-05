@@ -82,9 +82,7 @@ for N = 1:length(Test_Chromaticity)
     [~,Id] = min(sqrt((20*MB(:,1) - 20*Test_Chromaticity(N,1)).^2+(MB(:,2) - Test_Chromaticity(N,2)).^2));
     UpperLuminance_OP_GT(N,:) = MB(Id,3);
     
-    %[~,Id] = min(sqrt((20*Stimuli_MB(:,1) - 20*Test_Chromaticity(N,1)).^2+(Stimuli_MB(:,2) - Test_Chromaticity(N,2)).^2));
     [~,Id] = min(sqrt((20*Stimuli_MB(:,1) - 20*Test_Chromaticity(N,1)).^2));
-
     UpperLuminance_MaxLum(N,:) = Stimuli_MB(Id,3);
 end
 
