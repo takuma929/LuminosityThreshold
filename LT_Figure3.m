@@ -25,7 +25,7 @@ Test_Chromaticity = TestChromaticity.(Key.distribution{1}).(Key.illuminant{1});
 temp = Test_Chromaticity;temp(:,3) = 1;
 Test_Chromaticity_sRGB = LT_MBtoRGBImage(temp);
 
-Stimuli_sRGB = (HSLightProbe_MBtoRGBImage(Stimuli_MB)*0.8)';
+Stimuli_sRGB = LT_MBtoRGBImage(Stimuli_MB)'*0.8;
 
 scatter(rand(circleN,1),rand(circleN,1),circleSize,Stimuli_sRGB(randi(size(Stimuli_sRGB,1),1,circleN),:),'o','filled');hold on 
 scatter(0.5,0.5,circleSize,[0.8 0.8 0.8],'o','filled') 
