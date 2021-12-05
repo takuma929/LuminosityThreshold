@@ -1,6 +1,7 @@
 %% Luminosity Threshold
-% Created by TM 5/12/2021
-% Dependencies: Psychtoolbox 3
+% Created by TM 5/12/2021\
+
+% Dependencies: Psychtoolbox 3, brewermap (https://www.mathworks.com/matlabcentral/fileexchange/45208-colorbrewer-attractive-and-distinctive-colormaps) 
 
 All codes are written using MATLAB R2020a.
 To save figures, the toolbox use a function "exportgraphics" introduced in R2020a.
