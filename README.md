@@ -12,7 +12,7 @@ Takuma Morimoto, Ai Numata, Kazuho Fukuda and Keiji Uchikawa, “Luminosity thre
 %% Instructions %%
 
 This repository stores raw data and codes to reproduce figures in the publication above.
-Clone the repository and set the repository to current directory in MATLAB.
+Clone the repository and set the repository to current directory in MATLAB. Make sure to add the repository to path so MATLAB can find files.
 Run LT_main.m and all figures will be saved in a folder called Figs.
 
 Main codes to run the simulation:
