@@ -20,12 +20,13 @@ Main codes to run the simulation:
 
 Data:
 - LT_Data.m: This stores raw experimental data and chromatic properties of experimental stimuli. The field name describes what it stores. The raw data is also deposited to https://doi.org/10.5281/zenodo.5590120
+- OP_MB: This folder has mat files that store MacLeod-Boynton chromaticity coordinates of 90,301 optimal colors under illuminants from 3000K to 2000K (500K steps) and magenta and green illuminants (L/(L+M), S/(L+M) and L+M from first to third columns where L+M is relative to a white surece with 100% reflectance over visible wavelengths).
 - MB_bbl_500to25000with500step.mat : This stores MacLeod-Boynton chromaticity coordinates of black body radiance from 500K to 25000K with 500K steps (L/(L+M) and S/(L+M) for first and second columns, respectively).
 - SOCS_MB.mat: This stores SOCS reflectance dataset in MacLeod-Boynton chromaticity coordinates.
-- SpectrumLocus_MB.mat: This stores MacLeod-Boynton chromaticity coordinates of spectrum locus (in the order of wavelength in nm, L/(L+M), S/(L+M) and L+M from first to fourth columns).
+- SpectrumLocus_MB.mat: This stores MacLeod-Boynton chromaticity coordinates of spectrum locus (wavelength in nm, L/(L+M), S/(L+M) and L+M from first to fourth columns).
 - ill6500K.mat: Spectrum of 6500K illuminant (wavelength and relative energy for first and second columns)
 - colormap_observers.mat : Color map to plot individual observer data in sRGB format
-  
+
 Plotting scripts:
 - LT_FigureX.m: Generate Figure X
 
