@@ -8,7 +8,7 @@ To save figures, the toolbox use a function "exportgraphics" introduced in R2020
 If you use an early version of MATLAB, the exportgraphics should be replaced by anotehr function (e.g. print).
 
 [Associated publication]
-Takuma Morimoto, Ai Numata, Kazuho Fukuda and Keiji Uchikawa, “Luminosity thresholds of colored surfaces are determined by their upper-limit luminances empirically internalized in the visual system,” Journal of Vision (in press)
+Takuma Morimoto, Ai Numata, Kazuho Fukuda, Keiji Uchikawa; Luminosity thresholds of colored surfaces are determined by their upper-limit luminances empirically internalized in the visual system. Journal of Vision 2021;21(13):3. doi: https://doi.org/10.1167/jov.21.13.3.
 
 %% Instructions %%
 
